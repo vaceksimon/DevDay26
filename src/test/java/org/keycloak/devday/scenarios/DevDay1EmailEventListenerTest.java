@@ -1,5 +1,8 @@
 package org.keycloak.devday.scenarios;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.keycloak.events.email.EmailEventListenerProviderFactory;
 import org.keycloak.testframework.annotations.InjectRealm;
@@ -31,10 +34,13 @@ public class DevDay1EmailEventListenerTest {
     @InjectOAuthClient
     OAuthClient oAuthClient;
 
-
     @Test
-    public void testFailedLoginEmailEvent() {
-        // TODO
+    public void testFailedLoginEmailEvent() throws MessagingException {
+        oAuthClient.doPasswordGrantRequest(user.getUsername(), "invalid");
+
+        mail.waitForIncomingEmail(1);
+        MimeMessage lastReceivedMessage = mail.getLastReceivedMessage();
+        Assertions.assertEquals("Login error", lastReceivedMessage.getSubject());
     }
 
     private static class EmailSenderRealmConfig implements RealmConfig {
