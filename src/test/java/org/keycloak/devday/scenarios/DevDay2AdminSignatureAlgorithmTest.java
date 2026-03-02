@@ -2,6 +2,7 @@ package org.keycloak.devday.scenarios;
 
 import org.junit.jupiter.api.Test;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.crypto.Algorithm;
 import org.keycloak.testframework.annotations.InjectAdminClient;
 import org.keycloak.testframework.annotations.InjectRealm;
 import org.keycloak.testframework.annotations.KeycloakIntegrationTest;
@@ -18,6 +19,8 @@ public class DevDay2AdminSignatureAlgorithmTest {
 
     @Test
     public void changeRealmTokenAlgorithm() {
+        masterRealm.updateWithCleanup(r -> r.defaultSignatureAlgorithm(Algorithm.ES256));
+
         // TODO
     }
 }
