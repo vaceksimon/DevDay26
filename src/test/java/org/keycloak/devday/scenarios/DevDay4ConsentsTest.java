@@ -4,10 +4,17 @@ import org.junit.jupiter.api.Test;
 import org.keycloak.testframework.annotations.InjectRealm;
 import org.keycloak.testframework.annotations.InjectUser;
 import org.keycloak.testframework.annotations.KeycloakIntegrationTest;
+import org.keycloak.testframework.oauth.OAuthClient;
+import org.keycloak.testframework.oauth.annotations.InjectOAuthClient;
 import org.keycloak.testframework.realm.ManagedRealm;
 import org.keycloak.testframework.realm.ManagedUser;
 import org.keycloak.testframework.realm.UserConfig;
 import org.keycloak.testframework.realm.UserConfigBuilder;
+import org.keycloak.testframework.ui.annotations.InjectPage;
+import org.keycloak.testframework.ui.annotations.InjectWebDriver;
+import org.keycloak.testframework.ui.page.ConsentPage;
+import org.keycloak.testframework.ui.page.LoginPage;
+import org.keycloak.testframework.ui.webdriver.ManagedWebDriver;
 
 @KeycloakIntegrationTest
 public class DevDay4ConsentsTest {
@@ -17,6 +24,18 @@ public class DevDay4ConsentsTest {
 
     @InjectUser(config = ProviderRealmUserConf.class)
     ManagedUser user;
+
+    @InjectOAuthClient
+    OAuthClient oAuthClient;
+
+    @InjectWebDriver
+    ManagedWebDriver driver;
+
+    @InjectPage
+    LoginPage loginPage;
+
+    @InjectPage
+    ConsentPage consentPage;
 
     @Test
     public void testConsentCancel() {
