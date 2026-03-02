@@ -48,6 +48,10 @@
             <artifactId>keycloak-test-framework-oauth</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-services</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
