@@ -1,23 +1,44 @@
 package org.keycloak.devday.scenarios;
 
 import org.junit.jupiter.api.Test;
+import org.keycloak.events.email.EmailEventListenerProviderFactory;
 import org.keycloak.testframework.annotations.InjectRealm;
 import org.keycloak.testframework.annotations.InjectUser;
 import org.keycloak.testframework.annotations.KeycloakIntegrationTest;
 import org.keycloak.testframework.realm.ManagedRealm;
 import org.keycloak.testframework.realm.ManagedUser;
+import org.keycloak.testframework.realm.RealmConfig;
+import org.keycloak.testframework.realm.RealmConfigBuilder;
+import org.keycloak.testframework.realm.UserConfig;
+import org.keycloak.testframework.realm.UserConfigBuilder;
 
 @KeycloakIntegrationTest
 public class DevDay1EmailEventListenerTest {
 
-    @InjectRealm
+    @InjectRealm(config = EmailSenderRealmConfig.class)
     ManagedRealm realm;
 
-    @InjectUser
+    @InjectUser(config = UserWithEmail.class)
     ManagedUser user;
 
     @Test
     public void testFailedLoginEmailEvent() {
         // TODO
+    }
+
+    private static class EmailSenderRealmConfig implements RealmConfig {
+
+        @Override
+        public RealmConfigBuilder configure(RealmConfigBuilder realm) {
+            return realm.eventsListeners(EmailEventListenerProviderFactory.ID);
+        }
+    }
+
+    private static class UserWithEmail implements UserConfig {
+
+        @Override
+        public UserConfigBuilder configure(UserConfigBuilder user) {
+            return user.username("test").email("test@local").password("password").emailVerified(true);
+        }
     }
 }
