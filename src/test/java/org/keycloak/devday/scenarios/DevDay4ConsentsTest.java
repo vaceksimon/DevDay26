@@ -19,6 +19,7 @@ import org.keycloak.testframework.ui.page.ConsentPage;
 import org.keycloak.testframework.ui.page.LoginPage;
 import org.keycloak.testframework.ui.webdriver.ManagedWebDriver;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @KeycloakIntegrationTest
@@ -63,7 +64,14 @@ public class DevDay4ConsentsTest {
         assertTrue(driver.page().getPageSource().contains("Happy days"));
         assertTrue(driver.getCurrentUrl().contains("error=access_denied"));
 
-        // TODO
+        oAuthClient.openLoginForm();
+        loginPage.fillLogin(user.getUsername(), user.getPassword());
+        loginPage.submit();
+        consentPage.confirm();
+
+        // successful login
+        assertFalse(driver.getCurrentUrl().contains("error"));
+        assertTrue(driver.page().getPageSource().contains("Happy days"), "Test user should be successfully logged in.");
     }
 
     private ClientResource findClientByClientId(RealmResource realm, String clientId) {
