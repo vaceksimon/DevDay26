@@ -1,5 +1,8 @@
 package org.keycloak.devday.scenarios;
 
+import jakarta.ws.rs.ServerErrorException;
+import jakarta.ws.rs.core.Response;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.keycloak.common.Profile;
 import org.keycloak.testframework.annotations.InjectRealm;
@@ -21,7 +24,12 @@ public class DevDay3ImpersonationDisabledTest {
 
     @Test
     public void testImpersonationDisabled() {
-        // TODO
+        try {
+            user.admin().impersonate();
+            Assertions.fail("Feature impersonation should be disabled.");
+        } catch (ServerErrorException e) {
+            Assertions.assertEquals(Response.Status.NOT_IMPLEMENTED.getStatusCode(), e.getResponse().getStatus());
+        }
     }
 
     static class ServerConfig implements KeycloakServerConfig {
