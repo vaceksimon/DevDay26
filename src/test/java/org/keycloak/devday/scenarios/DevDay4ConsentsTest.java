@@ -19,6 +19,8 @@ import org.keycloak.testframework.ui.page.ConsentPage;
 import org.keycloak.testframework.ui.page.LoginPage;
 import org.keycloak.testframework.ui.webdriver.ManagedWebDriver;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @KeycloakIntegrationTest
 public class DevDay4ConsentsTest {
 
@@ -48,6 +50,18 @@ public class DevDay4ConsentsTest {
         ClientRepresentation clientRepresentation = accountClient.toRepresentation();
         clientRepresentation.setConsentRequired(true);
         accountClient.update(clientRepresentation);
+
+        // navigate to account console and login
+        oAuthClient.openLoginForm();
+        loginPage.fillLogin(user.getUsername(), user.getPassword());
+        loginPage.submit();
+
+        consentPage.assertCurrent();
+        consentPage.cancel();
+
+        // check an error page after cancelling the consent
+        assertTrue(driver.page().getPageSource().contains("Happy days"));
+        assertTrue(driver.getCurrentUrl().contains("error=access_denied"));
 
         // TODO
     }
